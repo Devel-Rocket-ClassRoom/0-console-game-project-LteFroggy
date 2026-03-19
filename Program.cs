@@ -1,1 +1,1 @@
-return;
+new MainApp().Run();
