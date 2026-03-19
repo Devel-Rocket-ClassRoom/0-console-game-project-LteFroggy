@@ -12,6 +12,10 @@ namespace Framework.Engine
         public abstract int Width { get; }
         public abstract int Height { get; }
 
+        // 장애물 충돌 판정 거리
+        public abstract int CollisionWidth { get; }
+        public abstract int CollisionHeight { get; }
+
         public string Name { get; set; } = "";
         public bool IsActive { get; set; } = true;
         public Scene Scene { get; }

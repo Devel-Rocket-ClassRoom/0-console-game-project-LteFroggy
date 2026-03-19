@@ -34,18 +34,22 @@ class Dinosour : GameObject {
     public override int YLoc => (int)_yLoc;
 
     private bool OnGround => _yLoc >= _baseYLoc;
+
+    public override int CollisionWidth => Width - 1;
+
+    public override int CollisionHeight => Height - 1;
+
     public Dinosour(Scene scene) : base(scene) {
         _baseYLoc = 19 - Height;
         _runState = 0;
+        _xLoc = 5;
         _yLoc = _baseYLoc;
         _ySpeed = 0;
     }
 
     public override void Draw(ScreenBuffer buffer) {
-
-        buffer.WriteText(0, (int)_yLoc - 1, $"xLoc : {XLoc}, yLoc : {YLoc}");
-        buffer.WriteLines(0, (int)_yLoc, _runFrames[_runState]);
-        buffer.WriteLines(0, (int)_yLoc, _runFrames[_runState]);
+        buffer.WriteLines((int)_xLoc, (int)_yLoc, _runFrames[_runState]);
+        buffer.WriteLines((int)_xLoc, (int)_yLoc, _runFrames[_runState]);
         buffer.WriteText(0, 0, $"ySpeed : {_ySpeed}");
     }
 
