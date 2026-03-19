@@ -15,21 +15,24 @@ abstract class BasicObstacle : GameObject {
     public override int Width => ObstacleShape[0].Length;
     public override int Height => ObstacleShape.Length;
 
+    public override int CollisionWidth => Width - 1;
+    public override int CollisionHeight => Height - 1;
+
+
     // 장애물 모양
     protected abstract string[] ObstacleShape { get; }
 
 
     // 장애물 그리는 규칙도 모두 동일하므로, 동일하게 구현
     public override void Draw(ScreenBuffer buffer) {
-        buffer.WriteText((int)_xLoc - Width, (int)_yLoc - 1, $"xLoc : {XLoc}, yLoc : {YLoc}");
-        buffer.WriteLines((int)_xLoc - Width, (int)_yLoc, ObstacleShape);
+        buffer.WriteLines((int)_xLoc, (int)_yLoc, ObstacleShape);
     }
 
     // 장애물 움직임 규칙은 모두 똑같으므로, Update는 동일하게 구현
     public override void Update(float deltaTime, float accerlation) {
         _xLoc -= deltaTime * accerlation;
 
-        if (_xLoc < 0) {
+        if (_xLoc + Width < 0) {
             IsActive = false;
         }
     }

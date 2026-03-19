@@ -6,6 +6,7 @@ namespace Framework.MyGame
 {
     public class PlayScene : Scene
     {
+        private ObstacleFactory _obstacleFactory;
         private GameState _gameState = GameState.Playing;
         private string _gameOverString;
 
@@ -27,6 +28,8 @@ namespace Framework.MyGame
             _elapsedTime = 0;
             _width = width;
             _height = height;
+
+            _obstacleFactory = new ObstacleFactory();
         }
 
         public override void Load()
@@ -62,8 +65,7 @@ namespace Framework.MyGame
             // 가로줄 그리기 (바닥)
             buffer.DrawHLine(0, 19, 80);
             // 점수판
-            buffer.WriteTextCentered(5, $"Score : {_score}");
-
+            buffer.WriteText(15, 5, $"Score : {_score}");
             // 테스트
             buffer.WriteText(0, 2, $"GameState : {_gameState}");
 
@@ -71,7 +73,7 @@ namespace Framework.MyGame
 
             // 게임 오버 후라면, 게임오버 대사 출력
             if (_gameState == GameState.GameOver) {
-                buffer.WriteTextCentered(10, _gameOverString);
+                buffer.WriteText(15, 6, _gameOverString);
             }
             
         }
@@ -84,8 +86,8 @@ namespace Framework.MyGame
         private void TrySpawn() {
             // 스폰시간이 되었다면, 장애물 추가
             if (_spawnTimer >= _nextSpawnTime) {
-                // 테스트코드
-                AddGameObject(new Fence(this, _width, _height));
+                // 랜덤 오브젝트 생성
+                AddGameObject(_obstacleFactory.GetRandomObstacle(_rand.Next(1, 100), this, _width, _height));
                 _spawnTimer = 0;
                 _nextSpawnTime = (_elapsedTime / 100) + (float)(_rand.NextDouble() * 3) + 1;
             } else { }
@@ -96,18 +98,18 @@ namespace Framework.MyGame
 
             // 공룡의 현위치 파악
             int dinoXStart = objects[0].XLoc;
-            int dinoXEnd = dinoXStart + objects[0].Width;
+            int dinoXEnd = dinoXStart + objects[0].CollisionWidth;
 
             int dinoYStart = objects[0].YLoc;
-            int dinoYEnd = dinoYStart + objects[0].Height;
+            int dinoYEnd = dinoYStart + objects[0].CollisionHeight;
 
             // 0번이 공룡, 나머지는 모두 장애물임. 따라서 0번과 나머지만 비교
             for (int i = 1; i < objects.Count; i++) {
                 int obstacleXStart = objects[i].XLoc;
-                int obstacleXEnd = obstacleXStart + objects[i].Width;
+                int obstacleXEnd = obstacleXStart + objects[i].CollisionWidth;
 
                 int obstacleYStart = objects[i].YLoc;
-                int obstacleYEnd = obstacleYStart + objects[i].Height;
+                int obstacleYEnd = obstacleYStart + objects[i].CollisionHeight;
 
                 // 공룡이 장애물보다 왼쪽에 있는 경우
                 if (dinoXEnd < obstacleXStart) { continue; }
@@ -115,6 +117,8 @@ namespace Framework.MyGame
                 else if (dinoXStart > obstacleXEnd) { continue; }
                 // 공룡이 장애물보다 위에 있는 경우
                 else if (dinoYEnd < obstacleYStart) { continue; }
+                // 공룡이 장애물보다 아래에 있는 경우
+                else if (dinoYStart > obstacleYEnd) { continue; }
                 // 다 아니라면 충돌
                 else {
                     _gameState = GameState.GameOver;
