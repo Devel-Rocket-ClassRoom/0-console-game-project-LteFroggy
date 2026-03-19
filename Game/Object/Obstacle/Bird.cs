@@ -13,7 +13,9 @@ class Bird : BasicObstacle {
         _yLoc -= 6;
     }
 
-    public override string GameOverString => $"버드 스트라이크에 당했습니다..";
+    public override string GameOverString => $"불쌍한 새와 충돌했습니다..";
 
     protected override string[] ObstacleShape => _shape;
+
+    protected override ConsoleColor Color => ConsoleColor.Yellow;
 }

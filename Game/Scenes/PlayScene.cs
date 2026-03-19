@@ -17,10 +17,11 @@ namespace Framework.MyGame
         private float _elapsedTime;
         private float _spawnTimer;
         private float _nextSpawnTime;
+        private float _
 
         private Random _rand = new Random();
 
-        private float _accerlation => _elapsedTime + 15f;
+        private float _acceleration => 15f + _elapsedTime * 0.5f;
         public event GameAction PlayAgainRequested;
         
         public PlayScene(int width, int height) {
@@ -47,7 +48,7 @@ namespace Framework.MyGame
             if (_gameState == GameState.Playing) {
                 _elapsedTime += deltaTime;
                 _spawnTimer += deltaTime;
-                UpdateGameObjects(deltaTime, _accerlation);
+                UpdateGameObjects(deltaTime, _acceleration);
             
                 // 장애물 스폰
                 TrySpawn();
@@ -63,11 +64,9 @@ namespace Framework.MyGame
         public override void Draw(ScreenBuffer buffer)
         {
             // 가로줄 그리기 (바닥)
-            buffer.DrawHLine(0, 19, 80);
+            buffer.DrawHLine(0, 19, _width, '-', ConsoleColor.DarkYellow);
             // 점수판
-            buffer.WriteText(15, 5, $"Score : {_score}");
-            // 테스트
-            buffer.WriteText(0, 2, $"GameState : {_gameState}");
+            buffer.WriteText(1, 1, $"점수 : {_score}점");
 
             DrawGameObjects(buffer);
 
@@ -75,7 +74,6 @@ namespace Framework.MyGame
             if (_gameState == GameState.GameOver) {
                 buffer.WriteText(15, 6, _gameOverString);
             }
-            
         }
 
         public override void Unload()
@@ -89,7 +87,7 @@ namespace Framework.MyGame
                 // 랜덤 오브젝트 생성
                 AddGameObject(_obstacleFactory.GetRandomObstacle(_rand.Next(1, 100), this, _width, _height));
                 _spawnTimer = 0;
-                _nextSpawnTime = (_elapsedTime / 100) + (float)(_rand.NextDouble() * 3) + 1;
+                _nextSpawnTime = _elapsedTime + 0.5f + (float)(_rand.NextDouble() * 2f);
             } else { }
         }
 

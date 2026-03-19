@@ -1,4 +1,5 @@
 ﻿using Framework.Engine;
+using System;
 
 abstract class BasicObstacle : GameObject {
 
@@ -21,11 +22,13 @@ abstract class BasicObstacle : GameObject {
 
     // 장애물 모양
     protected abstract string[] ObstacleShape { get; }
+    // 색상
+    protected abstract ConsoleColor Color { get; }
 
 
     // 장애물 그리는 규칙도 모두 동일하므로, 동일하게 구현
     public override void Draw(ScreenBuffer buffer) {
-        buffer.WriteLines((int)_xLoc, (int)_yLoc, ObstacleShape);
+        buffer.WriteLines((int)_xLoc, (int)_yLoc, ObstacleShape, Color);
     }
 
     // 장애물 움직임 규칙은 모두 똑같으므로, Update는 동일하게 구현

@@ -1,4 +1,5 @@
 ﻿using Framework.Engine;
+using System;
 
 class Tree : BasicObstacle {
     private string[] _shape = new string[] {
@@ -13,4 +14,6 @@ class Tree : BasicObstacle {
     public override string GameOverString => "나무에 박아 쓰러졌습니다..";
 
     protected override string[] ObstacleShape => _shape;
+
+    protected override ConsoleColor Color => ConsoleColor.Green;
 }

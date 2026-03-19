@@ -18,4 +18,6 @@ class Car : BasicObstacle {
     public override int CollisionHeight => base.CollisionHeight;
 
     protected override string[] ObstacleShape => _shape;
+
+    protected override ConsoleColor Color => ConsoleColor.Blue;
 }

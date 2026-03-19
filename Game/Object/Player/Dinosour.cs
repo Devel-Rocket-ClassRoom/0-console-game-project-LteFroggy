@@ -13,6 +13,8 @@ class Dinosour : GameObject {
     private readonly float _jumpDeadzone = 0.2f;
     private float _jumpHoldTime;
 
+    private readonly ConsoleColor _color;
+
     private readonly string[][] _runFrames = {
         new string[] {
         "  __ ",
@@ -44,13 +46,16 @@ class Dinosour : GameObject {
         _runState = 0;
         _xLoc = 5;
         _yLoc = _baseYLoc;
-        _ySpeed = 0;
+
+        // 처음 스페이스바 눌러서 시작할 때 점프로 시작하도록
+        _ySpeed = _jumpPower;
+
+        _color = ConsoleColor.Green;
     }
 
     public override void Draw(ScreenBuffer buffer) {
-        buffer.WriteLines((int)_xLoc, (int)_yLoc, _runFrames[_runState]);
-        buffer.WriteLines((int)_xLoc, (int)_yLoc, _runFrames[_runState]);
-        buffer.WriteText(0, 0, $"ySpeed : {_ySpeed}");
+        buffer.WriteLines((int)_xLoc, (int)_yLoc, _runFrames[_runState], _color);
+        buffer.WriteLines((int)_xLoc, (int)_yLoc, _runFrames[_runState], _color);
     }
 
     public override void Update(float deltaTime, float accerlation) {
