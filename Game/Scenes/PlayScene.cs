@@ -20,8 +20,6 @@ namespace Framework.MyGame
             _width = width;
         }
 
-        public int Accerlation
-
         public override void Load()
         {
             AddGameObject(new Dinosour(this)); 
