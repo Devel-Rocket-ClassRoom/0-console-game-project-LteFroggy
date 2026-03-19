@@ -8,12 +8,15 @@ namespace Framework.Engine
         public bool IsActive { get; set; } = true;
         public Scene Scene { get; }
 
+        public int Width { get; }
+        public int Height { get; }
+
         protected GameObject(Scene scene)
         {
             Scene = scene;
         }
 
-        public abstract void Update(float deltaTime);
+        public abstract void Update(float deltaTime, float accerlation);
         public abstract void Draw(ScreenBuffer buffer);
     }
 }

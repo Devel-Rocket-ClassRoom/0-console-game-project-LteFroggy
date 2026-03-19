@@ -34,6 +34,8 @@ class Dinosour : GameObject {
     public int Width => _runFrames[0][0].Length;
     public int Height => _runFrames[0].Length;
 
+    private bool OnGround => _yLoc >= _baseYLoc;
+
     public Dinosour(Scene scene) : base(scene) {
         _baseYLoc = 19 - Height;
         _runState = 0;
@@ -54,8 +56,8 @@ class Dinosour : GameObject {
         // y위치 갱신
         _yLoc -= deltaTime * _ySpeed;
 
-        // 점프 키를 눌렀을때 점프
-        if (Input.IsKeyDown(ConsoleKey.Spacebar)) {
+        // 점프 키를 눌렀을때 점프, 공중에 있을 때는 점프되면 안됨
+        if (Input.IsKeyDown(ConsoleKey.Spacebar) && OnGround) {
             _ySpeed = _jumpPower;
             _jumpHoldTime = 0;
         }
@@ -67,7 +69,7 @@ class Dinosour : GameObject {
         else if (Input.IsKey(ConsoleKey.Spacebar) && _jumpHoldTime <= _maxJumpHoldTime) { }
 
         // 바닥에 닿으면, 모든 값 기본으로
-        else if (_yLoc > _baseYLoc) {
+        else if (OnGround) {
             _ySpeed = 0;
             _yLoc = _baseYLoc;
             _jumpHoldTime = 0;
@@ -77,8 +79,6 @@ class Dinosour : GameObject {
         else {
             _ySpeed -= _gravity * deltaTime;
         } 
-
-
 
         if (_runState == 0) {
             _runState++;
