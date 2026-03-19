@@ -43,7 +43,7 @@ class MainApp : GameApp {
 
     private void ChangeToPlay()
     {
-        PlayScene play = new PlayScene(_width);
+        PlayScene play = new PlayScene(_width, _height);
         play.PlayAgainRequested += () => ChangeToPlay();
         _scenes.ChangeScene(play);
     }
