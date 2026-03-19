@@ -55,6 +55,8 @@ namespace Framework.Engine
                 if (_gameObjects[i].IsActive)
                 {
                     _gameObjects[i].Update(deltaTime, accerlation);
+                } else {
+                    RemoveGameObject(_gameObjects[i]);
                 }
             }
 

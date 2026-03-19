@@ -8,6 +8,9 @@ namespace Framework.Engine
         public bool IsActive { get; set; } = true;
         public Scene Scene { get; }
 
+        public int Width { get; }
+        public int Height { get; }
+
         protected GameObject(Scene scene)
         {
             Scene = scene;

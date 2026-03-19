@@ -4,10 +4,14 @@ using System;
 
 class MainApp : GameApp {
     private readonly SceneManager<Scene> _scenes;
+    private readonly int _width;
+    private readonly int _height;
 
     public MainApp(int width = 100, int height = 20) : base(width, height)
     {
         _scenes = new SceneManager<Scene>();
+        _width = width;
+        _height = height;
     }
 
     protected override void Initialize()
@@ -39,7 +43,7 @@ class MainApp : GameApp {
 
     private void ChangeToPlay()
     {
-        PlayScene play = new PlayScene();
+        PlayScene play = new PlayScene(_width);
         play.PlayAgainRequested += () => ChangeToPlay();
         _scenes.ChangeScene(play);
     }
