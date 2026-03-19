@@ -6,15 +6,12 @@ class Dinosour : GameObject {
     private int _runState;
     private readonly float _baseYLoc;
 
-    private float _yLoc;
     private float _ySpeed;
-
-    private readonly float _jumpPower = 20;
-    private readonly float _gravity = 100;
+    private readonly float _jumpPower = 15;
+    private readonly float _gravity = 60;
     private readonly float _maxJumpHoldTime = 0.40f;
     private readonly float _jumpDeadzone = 0.2f;
     private float _jumpHoldTime;
-    
 
     private readonly string[][] _runFrames = {
         new string[] {
@@ -31,10 +28,14 @@ class Dinosour : GameObject {
         },
     };
 
-    public int Width => _runFrames[0][0].Length;
-    public int Height => _runFrames[0].Length;
+    public override int Width => _runFrames[0][0].Length;
+    public override int Height => _runFrames[0].Length;
+    public override int XLoc => (int)_xLoc;
+    public override int YLoc => (int)_yLoc;
 
     private bool OnGround => _yLoc >= _baseYLoc;
+
+    
 
     public Dinosour(Scene scene) : base(scene) {
         _baseYLoc = 19 - Height;

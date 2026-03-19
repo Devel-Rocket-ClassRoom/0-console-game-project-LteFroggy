@@ -4,12 +4,17 @@ namespace Framework.Engine
 {
     public abstract class GameObject
     {
+        protected float _xLoc;
+        protected float _yLoc;
+
+        public abstract int XLoc { get; }
+        public abstract int YLoc { get; }
+        public abstract int Width { get; }
+        public abstract int Height { get; }
+
         public string Name { get; set; } = "";
         public bool IsActive { get; set; } = true;
         public Scene Scene { get; }
-
-        public int Width { get; }
-        public int Height { get; }
 
         protected GameObject(Scene scene)
         {
