@@ -1,14 +1,13 @@
 ﻿using Framework.Engine;
 
 abstract class BasicObstacle : GameObject {
-    protected float _xLoc;
-    protected float _yLoc;
 
     protected BasicObstacle(Scene scene, int width, int height) : base(scene) {
         _xLoc = width - 1;
-        _yLoc = height; 
+        _yLoc = height - Height;
     }
 
+    public abstract string GameOverString { get; }
     public override int XLoc => (int)_xLoc;
     public override int YLoc => (int)_yLoc;
 
@@ -22,7 +21,8 @@ abstract class BasicObstacle : GameObject {
 
     // 장애물 그리는 규칙도 모두 동일하므로, 동일하게 구현
     public override void Draw(ScreenBuffer buffer) {
-        buffer.WriteLines((int)_xLoc - ObstacleWidth, (int)_yLoc - ObstacleHeight, ObstacleShape);
+        buffer.WriteText((int)_xLoc - Width, (int)_yLoc - 1, $"xLoc : {XLoc}, yLoc : {YLoc}");
+        buffer.WriteLines((int)_xLoc - Width, (int)_yLoc, ObstacleShape);
     }
 
     // 장애물 움직임 규칙은 모두 똑같으므로, Update는 동일하게 구현
