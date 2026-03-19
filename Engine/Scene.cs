@@ -45,7 +45,7 @@ namespace Framework.Engine
             _pendingRemove.Clear();
         }
 
-        protected void UpdateGameObjects(float deltaTime)
+        protected void UpdateGameObjects(float deltaTime, float accerlation)
         {
             FlushPending();
             _isUpdating = true;
@@ -54,7 +54,7 @@ namespace Framework.Engine
             {
                 if (_gameObjects[i].IsActive)
                 {
-                    _gameObjects[i].Update(deltaTime);
+                    _gameObjects[i].Update(deltaTime, accerlation);
                 }
             }
 

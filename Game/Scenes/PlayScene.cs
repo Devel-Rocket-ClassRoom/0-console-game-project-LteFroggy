@@ -9,6 +9,8 @@ namespace Framework.MyGame
 
         public event GameAction PlayAgainRequested;
 
+        public int Accerlation
+
         public override void Load()
         {
             _score = 0;
@@ -17,7 +19,7 @@ namespace Framework.MyGame
 
         public override void Update(float deltaTime)
         {
-            UpdateGameObjects(deltaTime);
+            UpdateGameObjects(deltaTime, Accerlation);
         }
 
         public override void Draw(ScreenBuffer buffer)

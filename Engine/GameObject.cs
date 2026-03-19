@@ -13,7 +13,7 @@ namespace Framework.Engine
             Scene = scene;
         }
 
-        public abstract void Update(float deltaTime);
+        public abstract void Update(float deltaTime, float accerlation);
         public abstract void Draw(ScreenBuffer buffer);
     }
 }

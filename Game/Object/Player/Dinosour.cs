@@ -78,8 +78,6 @@ class Dinosour : GameObject {
             _ySpeed -= _gravity * deltaTime;
         } 
 
-
-
         if (_runState == 0) {
             _runState++;
         } else {
