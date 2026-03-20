@@ -1,7 +1,7 @@
 ﻿using Framework.Engine;
 using System;
 
-abstract class BasicObstacle : GameObject {
+public abstract class BasicObstacle : GameObject {
 
     protected BasicObstacle(Scene scene, int width, int height) : base(scene) {
         _xLoc = width - 1;
@@ -26,12 +26,12 @@ abstract class BasicObstacle : GameObject {
     protected abstract ConsoleColor Color { get; }
 
 
-    // 장애물 그리는 규칙도 모두 동일하므로, 동일하게 구현
+    // 장애물 그리는 규칙도 모두 동일
     public override void Draw(ScreenBuffer buffer) {
         buffer.WriteLines((int)_xLoc, (int)_yLoc, ObstacleShape, Color);
     }
 
-    // 장애물 움직임 규칙은 모두 똑같으므로, Update는 동일하게 구현
+    // 장애물 움직임 규칙은 모든 장애물 동일
     public override void Update(float deltaTime, float accerlation) {
         _xLoc -= deltaTime * accerlation;
 

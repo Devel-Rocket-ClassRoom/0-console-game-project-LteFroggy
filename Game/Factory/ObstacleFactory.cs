@@ -1,7 +1,7 @@
 ﻿using Framework.Engine;
 using System;
 using System.Collections.Generic;
-class ObstacleFactory {
+public class ObstacleFactory {
     private List<Func<Scene, int, int, BasicObstacle>> _obstacleFactory;
 
     public ObstacleFactory() {

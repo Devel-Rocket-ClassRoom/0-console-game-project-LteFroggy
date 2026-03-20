@@ -1,1 +1,2 @@
-new MainApp().Run();
+
+new MainApp(new ObstacleFactory()).Run();

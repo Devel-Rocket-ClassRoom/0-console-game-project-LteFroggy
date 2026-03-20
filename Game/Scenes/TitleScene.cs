@@ -32,7 +32,7 @@ namespace Framework.MyGame
             buffer.WriteLines(20, 1, dinoArt, ConsoleColor.Green);
             buffer.WriteTextCentered(10, "장애물을 피해 달려야 합니다.", ConsoleColor.DarkGreen);
             buffer.WriteTextCentered(11, "스페이스바를 눌러보세요.", ConsoleColor.DarkGreen);
-            buffer.WriteTextCentered(19, "ESC키를 눌러 종료합니다.", ConsoleColor.DarkGray);
+            buffer.WriteTextCentered(15, "ESC키를 눌러 종료합니다.", ConsoleColor.DarkGray);
         }
 
         public override void Unload()
