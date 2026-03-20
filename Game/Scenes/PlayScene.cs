@@ -152,11 +152,11 @@ namespace Framework.MyGame
                 // 공룡이 장애물보다 아래에 있는 경우
                 else if (dinoYStart > obstacleYEnd) { continue; }
                 // 다 아니라면 충돌
-                //else {
-                //    _gameState = GameState.GameOver;
-                //    _gameOverString = ((BasicObstacle)obstacle).GameOverString;
-                //    break;
-                //}
+                else {
+                    _gameState = GameState.GameOver;
+                    _gameOverString = ((BasicObstacle)obstacle).GameOverString;
+                    break;
+                }
             }
         }
     }
