@@ -14,41 +14,27 @@ namespace Framework.MyGame
         // 게임 종료 시 출력될 스트링 (차에 치었습니다 등)
         private string _gameOverString;
 
-        // 장애물 생성용 팩토리클래스
-        private ObstacleFactory _obstacleFactory;
-        // 배경 지형지물 생성용 팩토리클래스
-        private BackgroundFactory _backgroundFactory;
+        // 장애물 스포너
+        private ObstacleSpawner _obstacleSpawner;
+        // 배경 지형지물 스포너
+        private BackgroundSpawner _backgroundSpawner;
         
         // 게임 출력 화면 너비 (지면 렌더링 시 사용)
         private readonly int _width;
         // 게임 출력 화면 높이 (해, 달 등 오브젝트 렌더링 시 사용)
         private readonly int _height;
-        // 장애물 스폰 타이머
-        private float _spawnTimer;
-        private float _nextSpawnTime;
-
-        // 배경 스폰 차례값
-        private int _backgroundPhase = default;
-        // 배경 스폰 관련값
-        private const int k_SunSpawnScore = 0;
-        private const int k_CloudSpawnPeriod = 2;
-        private const int k_MoonSpawnScore = 12;
-        private const int k_BackgroundCycle = 24;
-        private bool _isCloudSpawned = false;
-
-        private readonly Random _rand = new Random();
         private float _acceleration => 30f + _score * 2;
 
         public event GameAction PlayAgainRequested;
         public event GameAction BackToMain;
         
-        public PlayScene(int width, int height, ObstacleFactory factory, BackgroundFactory backgroundFactory) {
+        public PlayScene(int width, int height, ObstacleFactory obstacleFactory, BackgroundFactory backgroundFactory) {
             _score = 0;
             _width = width;
             _height = height;
 
-            _obstacleFactory = factory;
-            _backgroundFactory = backgroundFactory;
+            _obstacleSpawner = new ObstacleSpawner(obstacleFactory, this, _width, _height);
+            _backgroundSpawner = new BackgroundSpawner(backgroundFactory, this, _width, _height);
 
             _pendingRemovalObstacles = new List<GameObject>();
             _obstacles = new List<GameObject>();
@@ -64,14 +50,18 @@ namespace Framework.MyGame
         public override void Update(float deltaTime)
         {
             if (_gameState == GameState.Playing) {
-                _spawnTimer += deltaTime;
                 UpdateGameObjects(deltaTime, _acceleration);
 
                 // 지형지물 스폰
-                SpawnBackground();
+                BasicBackgroundObject bgObject = _backgroundSpawner.Update(_score);
+                if (bgObject != null) { AddGameObject(bgObject); }
             
                 // 장애물 스폰
-                SpawnObstacle();
+                BasicObstacle obstacle = _obstacleSpawner.Update(deltaTime);
+                if (obstacle != null) {
+                    AddGameObject(obstacle);
+                    AddObstacle(obstacle);
+                }
 
                 // 충돌체크
                 CheckCollision();
@@ -115,52 +105,12 @@ namespace Framework.MyGame
             ClearGameObjects();
         }
 
-        private void SpawnObstacle() {
-            // 스폰시간이 되었다면, 장애물 추가
-            if (_spawnTimer >= _nextSpawnTime) {
-                // 랜덤 오브젝트 생성
-                GameObject obj = _obstacleFactory.GetRandomObstacle(this, _width, _height);
-                AddGameObject(obj);
-                AddObstacle(obj);
-                _spawnTimer = 0;
-                _nextSpawnTime = 1.5f + (float)(_rand.NextDouble() * 2f);
-            }
-            // 시간이 되지 않았다면, 스킵
-            else { }
+        // 생성된 장애물 목록에 추가
+        private void AddObstacle(GameObject obstacle) {
+            _obstacles.Add(obstacle);
         }
 
-        private void SpawnBackground() {
-            // 18점마다 사이클 반복
-            int _scoreInCycle = _score % k_BackgroundCycle;
-
-            // 해 스폰, 달 스폰 시점 제외 구름 반복 생성
-            if (!_isCloudSpawned
-                && _scoreInCycle % k_CloudSpawnPeriod == 0 
-                && _scoreInCycle != k_SunSpawnScore 
-                && _scoreInCycle != k_MoonSpawnScore) {
-                AddGameObject(_backgroundFactory.MakeCloud(this, _width, _height));
-                _isCloudSpawned = true;
-            } else if (_scoreInCycle % k_CloudSpawnPeriod != 0) {
-                _isCloudSpawned = false;
-            }
-            // 해 등장
-            if (_backgroundPhase == 0 
-                    && _scoreInCycle >= k_SunSpawnScore) {
-                AddGameObject(_backgroundFactory.MakeSun(this, _width, _height));
-                _backgroundPhase = 1;
-            } 
-            // 달 등장
-            else if (_backgroundPhase == 1 
-                    && _scoreInCycle >= k_MoonSpawnScore) {
-                AddGameObject(_backgroundFactory.MakeMoon(this, _width, _height));
-                _backgroundPhase = 2;
-            }
-            // 사이클 초기화
-            if (_scoreInCycle == 0 && _backgroundPhase == 2) {
-                _backgroundPhase = 0;
-            }
-        }
-
+        // 이미 화면에서 나간 장애물 삭제
         private void DespawnObstacle() {
             // 공룡 위치와 나머지를 모두 비교
             foreach (var obstacle in _obstacles) {
@@ -208,10 +158,6 @@ namespace Framework.MyGame
                 //    break;
                 //}
             }
-        }
-
-        private void AddObstacle(GameObject obstacle) {
-            _obstacles.Add(obstacle);
         }
     }
 }
