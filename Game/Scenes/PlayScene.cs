@@ -18,21 +18,18 @@ namespace Framework.MyGame
         private int _width;
         // 게임 출력 화면 높이 (해, 달 등 오브젝트 렌더링 시 사용)
         private int _height;
-        // 게임 시작 후 지난 시간
-        private float _elapsedTime;
         // 장애물 스폰 타이머
         private float _spawnTimer;
         private float _nextSpawnTime;
 
         private Random _rand = new Random();
 
-        private float _acceleration => 15f + _elapsedTime * 0.5f;
+        private float _acceleration => 30f + _score * 2;
         public event GameAction PlayAgainRequested;
         public event GameAction BackToMain;
         
         public PlayScene(int width, int height, ObstacleFactory factory) {
             _score = 0;
-            _elapsedTime = 0;
             _width = width;
             _height = height;
 
@@ -52,7 +49,6 @@ namespace Framework.MyGame
         public override void Update(float deltaTime)
         {
             if (_gameState == GameState.Playing) {
-                _elapsedTime += deltaTime;
                 _spawnTimer += deltaTime;
                 UpdateGameObjects(deltaTime, _acceleration);
             
@@ -105,7 +101,7 @@ namespace Framework.MyGame
                 // 랜덤 오브젝트 생성
                 AddGameObject(_obstacleFactory.GetRandomObstacle(_rand.Next(1, 100), this, _width, _height));
                 _spawnTimer = 0;
-                _nextSpawnTime = ( _elapsedTime * 0.1f) + 0.9f + (float)(_rand.NextDouble() * 2f);
+                _nextSpawnTime = ( _score * 0f) + 1.5f + (float)(_rand.NextDouble() * 2f);
             } else { }
         }
 

@@ -7,10 +7,10 @@ class Dinosour : GameObject {
     private readonly float _baseYLoc;
 
     private float _ySpeed;
-    private readonly float _jumpPower = 15;
-    private readonly float _gravity = 60;
-    private readonly float _maxJumpHoldTime = 0.40f;
-    private readonly float _jumpDeadzone = 0.2f;
+    private readonly float _jumpPower;
+    private readonly float _gravity;
+    private readonly float _jumpDeadzone;
+    private readonly float _maxJumpHoldTime;
     private float _jumpHoldTime;
 
     private readonly ConsoleColor _color;
@@ -42,6 +42,11 @@ class Dinosour : GameObject {
     public override int CollisionHeight => Height - 1;
 
     public Dinosour(Scene scene) : base(scene) {
+        _jumpPower = 15;
+        _gravity = 70;
+        _jumpDeadzone = 0.2f;
+        _maxJumpHoldTime = _jumpDeadzone + 0.1f;
+
         _baseYLoc = 19 - Height;
         _runState = 0;
         _xLoc = 5;
