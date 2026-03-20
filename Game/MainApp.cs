@@ -3,17 +3,19 @@ using Framework.MyGame;
 using System;
 
 class MainApp : GameApp {
-    private readonly ObstacleFactory _factory;
+    private readonly ObstacleFactory _obstacleFactory;
+    private readonly BackgroundFactory _backgroundFactory;
     private readonly SceneManager<Scene> _scenes;
     private readonly int _width;
     private readonly int _height;
 
-    public MainApp(ObstacleFactory factory, int width = 100, int height = 20) : base(width, height)
+    public MainApp(ObstacleFactory obstacleFactory, BackgroundFactory backgroundFactory, int width = 100, int height = 20) : base(width, height)
     {
         _scenes = new SceneManager<Scene>();
         _width = width;
         _height = height;
-        _factory = factory;
+        _obstacleFactory = obstacleFactory;
+        _backgroundFactory = backgroundFactory;
     }
 
     protected override void Initialize()
@@ -45,7 +47,7 @@ class MainApp : GameApp {
 
     private void ChangeToPlay()
     {
-        PlayScene play = new PlayScene(_width, _height, _factory);
+        PlayScene play = new PlayScene(_width, _height, _obstacleFactory, _backgroundFactory);
         play.PlayAgainRequested += () => ChangeToPlay();
         play.BackToMain += () => Initialize();
         _scenes.ChangeScene(play);
