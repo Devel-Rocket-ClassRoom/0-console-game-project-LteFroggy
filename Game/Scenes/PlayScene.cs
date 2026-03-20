@@ -17,7 +17,7 @@ namespace Framework.MyGame
         // 장애물 생성용 팩토리클래스
         private ObstacleFactory _obstacleFactory;
         // 배경 지형지물 생성용 팩토리클래스
-        private BackgroundFactory _backgroundFactory;
+        private BackgroundSpawner _backgroundSpawner;
         
         // 게임 출력 화면 너비 (지면 렌더링 시 사용)
         private readonly int _width;
@@ -26,15 +26,6 @@ namespace Framework.MyGame
         // 장애물 스폰 타이머
         private float _spawnTimer;
         private float _nextSpawnTime;
-
-        // 배경 스폰 차례값
-        private int _backgroundPhase = default;
-        // 배경 스폰 관련값
-        private const int k_SunSpawnScore = 0;
-        private const int k_CloudSpawnPeriod = 2;
-        private const int k_MoonSpawnScore = 12;
-        private const int k_BackgroundCycle = 24;
-        private bool _isCloudSpawned = false;
 
         private readonly Random _rand = new Random();
         private float _acceleration => 30f + _score * 2;
@@ -48,7 +39,7 @@ namespace Framework.MyGame
             _height = height;
 
             _obstacleFactory = factory;
-            _backgroundFactory = backgroundFactory;
+            _backgroundSpawner = new BackgroundSpawner(backgroundFactory, this, _width, _height);
 
             _pendingRemovalObstacles = new List<GameObject>();
             _obstacles = new List<GameObject>();
@@ -68,7 +59,8 @@ namespace Framework.MyGame
                 UpdateGameObjects(deltaTime, _acceleration);
 
                 // 지형지물 스폰
-                SpawnBackground();
+                BasicBackgroundObject backgroundObject = _backgroundSpawner.Update(_score);
+                if (backgroundObject != null) { AddGameObject(backgroundObject); }
             
                 // 장애물 스폰
                 SpawnObstacle();
@@ -127,38 +119,6 @@ namespace Framework.MyGame
             }
             // 시간이 되지 않았다면, 스킵
             else { }
-        }
-
-        private void SpawnBackground() {
-            // 18점마다 사이클 반복
-            int _scoreInCycle = _score % k_BackgroundCycle;
-
-            // 해 스폰, 달 스폰 시점 제외 구름 반복 생성
-            if (!_isCloudSpawned
-                && _scoreInCycle % k_CloudSpawnPeriod == 0 
-                && _scoreInCycle != k_SunSpawnScore 
-                && _scoreInCycle != k_MoonSpawnScore) {
-                AddGameObject(_backgroundFactory.MakeCloud(this, _width, _height));
-                _isCloudSpawned = true;
-            } else if (_scoreInCycle % k_CloudSpawnPeriod != 0) {
-                _isCloudSpawned = false;
-            }
-            // 해 등장
-            if (_backgroundPhase == 0 
-                    && _scoreInCycle >= k_SunSpawnScore) {
-                AddGameObject(_backgroundFactory.MakeSun(this, _width, _height));
-                _backgroundPhase = 1;
-            } 
-            // 달 등장
-            else if (_backgroundPhase == 1 
-                    && _scoreInCycle >= k_MoonSpawnScore) {
-                AddGameObject(_backgroundFactory.MakeMoon(this, _width, _height));
-                _backgroundPhase = 2;
-            }
-            // 사이클 초기화
-            if (_scoreInCycle == 0 && _backgroundPhase == 2) {
-                _backgroundPhase = 0;
-            }
         }
 
         private void DespawnObstacle() {
