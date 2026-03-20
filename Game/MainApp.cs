@@ -47,6 +47,7 @@ class MainApp : GameApp {
     {
         PlayScene play = new PlayScene(_width, _height, _factory);
         play.PlayAgainRequested += () => ChangeToPlay();
+        play.BackToMain += () => Initialize();
         _scenes.ChangeScene(play);
     }
 }

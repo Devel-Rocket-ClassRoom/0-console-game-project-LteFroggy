@@ -15,7 +15,7 @@ class Car : BasicObstacle {
 
     public override int CollisionWidth => base.CollisionWidth - 1;
 
-    public override int CollisionHeight => base.CollisionHeight;
+    public override int CollisionHeight => base.CollisionHeight - 1;
 
     protected override string[] ObstacleShape => _shape;
 

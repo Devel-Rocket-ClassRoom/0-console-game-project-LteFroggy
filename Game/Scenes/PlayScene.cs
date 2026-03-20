@@ -28,6 +28,7 @@ namespace Framework.MyGame
 
         private float _acceleration => 15f + _elapsedTime * 0.5f;
         public event GameAction PlayAgainRequested;
+        public event GameAction BackToMain;
         
         public PlayScene(int width, int height, ObstacleFactory factory) {
             _score = 0;
@@ -63,7 +64,17 @@ namespace Framework.MyGame
             }
 
             // 게임 오버 후라면, 업데이트는 중지
-            else { }
+            else { 
+                // 스페이스 누르면 재시작
+                if (Input.IsKeyDown(ConsoleKey.Spacebar)) {
+                    _gameState = GameState.Playing;
+                    PlayAgainRequested();
+                }
+                // 백스페이스 눌러서 메인으로
+                else if (Input.IsKeyDown(ConsoleKey.Backspace)) {
+                    BackToMain();
+                }
+            }
         }
 
         public override void Draw(ScreenBuffer buffer)
@@ -77,7 +88,9 @@ namespace Framework.MyGame
 
             // 게임 오버 후라면, 게임오버 대사 출력
             if (_gameState == GameState.GameOver) {
-                buffer.WriteText(15, 6, _gameOverString);
+                buffer.WriteText(5, 9, _gameOverString);
+                buffer.WriteTextCentered(2, $"다시 시작하려면 SPACE를 눌러주세요.");
+                buffer.WriteTextCentered(3, $"BACKSPACE를 눌러 메인화면으로 돌아갑니다.");
             }
         }
 
@@ -92,7 +105,7 @@ namespace Framework.MyGame
                 // 랜덤 오브젝트 생성
                 AddGameObject(_obstacleFactory.GetRandomObstacle(_rand.Next(1, 100), this, _width, _height));
                 _spawnTimer = 0;
-                _nextSpawnTime = _elapsedTime + 0.5f + (float)(_rand.NextDouble() * 2f);
+                _nextSpawnTime = ( _elapsedTime * 0.1f) + 0.9f + (float)(_rand.NextDouble() * 2f);
             } else { }
         }
 
