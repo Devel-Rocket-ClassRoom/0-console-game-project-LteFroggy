@@ -13,6 +13,8 @@ public class ObstacleFactory {
             (scene, x, y) => new Tree(scene, x, y),
             (scene, x, y) => new Car(scene, x, y),
             (scene, x, y) => new Bird(scene, x, y),
+            (scene, x, y) => new BigTree(scene, x, y),
+            (scene, x, y) => new Rock(scene, x, y)
         };
     }
     

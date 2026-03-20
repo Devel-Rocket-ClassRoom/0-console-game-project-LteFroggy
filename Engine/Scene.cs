@@ -64,7 +64,7 @@ namespace Framework.Engine
 
         protected void DrawGameObjects(ScreenBuffer buffer)
         {
-            for (int i = 0; i < _gameObjects.Count; i++)
+            for (int i = _gameObjects.Count - 1; i >= 0; i--)
             {
                 if (_gameObjects[i].IsActive)
                 {
