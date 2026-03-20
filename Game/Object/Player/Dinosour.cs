@@ -30,16 +30,16 @@ class Dinosour : GameObject {
         },
     };
 
-    public override int Width => _runFrames[0][0].Length;
-    public override int Height => _runFrames[0].Length;
+    public override int ObjectWidth => _runFrames[0][0].Length;
+    public override int ObjectHeight => _runFrames[0].Length;
     public override int XLoc => (int)_xLoc;
     public override int YLoc => (int)_yLoc;
 
     private bool OnGround => _yLoc >= _baseYLoc;
 
-    public override int CollisionWidth => Width - 1;
+    public override int CollisionWidth => ObjectWidth - 1;
 
-    public override int CollisionHeight => Height - 1;
+    public override int CollisionHeight => ObjectHeight - 1;
 
     public Dinosour(Scene scene) : base(scene) {
         _jumpPower = 15;
@@ -47,7 +47,7 @@ class Dinosour : GameObject {
         _jumpDeadzone = 0.2f;
         _maxJumpHoldTime = _jumpDeadzone + 0.1f;
 
-        _baseYLoc = 19 - Height;
+        _baseYLoc = 19 - ObjectHeight;
         _runState = 0;
         _xLoc = 5;
         _yLoc = _baseYLoc;

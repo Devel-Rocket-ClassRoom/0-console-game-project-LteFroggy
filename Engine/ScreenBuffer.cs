@@ -16,8 +16,8 @@ namespace Framework.Engine
         private static readonly int[] s_ansiFg = { 30, 34, 32, 36, 31, 35, 33, 37, 90, 94, 92, 96, 91, 95, 93, 97 };
         private static readonly int[] s_ansiBg = { 40, 44, 42, 46, 41, 45, 43, 47, 100, 104, 102, 106, 101, 105, 103, 107 };
 
-        public int Width => _width;
-        public int Height => _height;
+        public int ScreenWidth => _width;
+        public int ScreenHeight => _height;
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr GetStdHandle(int nStdHandle);

@@ -15,9 +15,7 @@ namespace Framework.MyGame
             "         __/ ( | ( |                      __/ ( | ( |",
             "        /__.-'|_|--|_|                   /__.-'|_|--|_|",
         };
-        public override void Load()
-        {
-        }
+        public override void Load() { }
 
         public override void Update(float deltaTime)
         {
@@ -35,8 +33,6 @@ namespace Framework.MyGame
             buffer.WriteTextCentered(15, "ESC키를 눌러 종료합니다.", ConsoleColor.DarkGray);
         }
 
-        public override void Unload()
-        {
-        }
+        public override void Unload() { }
     }
 }

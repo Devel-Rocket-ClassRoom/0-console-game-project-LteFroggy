@@ -8,16 +8,10 @@ namespace Framework.Engine
         private readonly List<GameObject> _pendingAdd = new List<GameObject>();
         private readonly List<GameObject> _pendingRemove = new List<GameObject>();
         private bool _isUpdating;
-
-        // PlayScene 내부에서 충돌 처리를 위한 Readonly List
-        protected IReadOnlyList<GameObject> GameObjects => _gameObjects;
-
         public abstract void Load();
         public abstract void Update(float deltaTime);
         public abstract void Draw(ScreenBuffer buffer);
         public abstract void Unload();
-
-        protected event GameAction ObstacleRemoveEvent;
 
         public void AddGameObject(GameObject gameObject)
         {
@@ -62,7 +56,6 @@ namespace Framework.Engine
                     _gameObjects[i].Update(deltaTime, accerlation);
                 } else {
                     RemoveGameObject(_gameObjects[i]);
-                    ObstacleRemoveEvent();
                 }
             }
 
